@@ -20,8 +20,6 @@ public class JuegoController {
         this.juegoService = juegoService;
     }
 
-    // GET /api/juegos            -> lista todos
-    // GET /api/juegos?genero=RPG -> filtra por género
     @GetMapping
     public ResponseEntity<List<Juego>> listar(@RequestParam(required = false) String genero) {
         if (genero != null) {
@@ -30,7 +28,6 @@ public class JuegoController {
         return ResponseEntity.ok(juegoService.listar());
     }
 
-    // GET /api/juegos/2 -> busca por id
     @GetMapping("/{id}")
     public ResponseEntity<Juego> buscarPorId(@PathVariable Long id) {
         return juegoService.buscarPorId(id)
@@ -38,10 +35,18 @@ public class JuegoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // POST /api/juegos -> crea un juego nuevo
+
     @PostMapping
     public ResponseEntity<Juego> crear(@Valid @RequestBody JuegoRequest request) {
         Juego nuevo = juegoService.crear(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
     }
+
+@DeleteMapping("/{id}")
+public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    if (juegoService.eliminar(id)) {
+        return ResponseEntity.noContent().build();
+    }
+    return ResponseEntity.notFound().build();
+}
 }

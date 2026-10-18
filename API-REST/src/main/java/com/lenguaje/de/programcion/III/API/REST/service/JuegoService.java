@@ -48,4 +48,8 @@ public class JuegoService {
         juegos.add(nuevo);
         return nuevo;
     }
+
+    public boolean eliminar(Long id) {
+    return juegos.removeIf(j -> j.getId().equals(id));
+}
 }
